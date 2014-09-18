@@ -41,4 +41,15 @@ module GraphsHelper
     html
   end
 
+  def select_tag_for_cf
+    html = ''
+    html += '<select name="cf" id="select-cf">'
+    %w(AVERAGE MAX).each do |cf|
+      selected = (cf == @graph_parameter.cf) ? 'selected="selected"' : ''
+      html += %!<option class="span2" value="#{cf}" #{selected}>#{cf}</option>!
+    end
+    html += '</select>'
+    html
+  end
+
 end

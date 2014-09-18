@@ -1,11 +1,13 @@
 class GraphParameter < ApplicationParameter
-  attr_reader :t, :from, :to, :lower_limit, :upper_limit
+  attr_reader :t, :from, :to, :lower_limit, :upper_limit, :cf
   alias :term :t
 
   SHORTABLE_TERMS = %w(c h 4h n 8h d 3d)
 
   Y_GRID_LIMIT_UNITS = %w(K M G T)
   Y_GRID_LIMIT_REGEXP = /\A(-?\d+)([#{Y_GRID_LIMIT_UNITS.join}]?)\Z/i
+
+  CFS = %w(AVERAGE MAX)
 
   def valid?
     self.errors.empty?
@@ -17,7 +19,7 @@ class GraphParameter < ApplicationParameter
 
   def update(params = {})
     self.errors.clear
-    params = params.slice(:t, :from, :to, :size, :action, :lower_limit, :upper_limit)
+    params = params.slice(:t, :from, :to, :size, :action, :lower_limit, :upper_limit, :cf)
 
     @t = params[:t].presence || @t || 'd'
 
@@ -64,6 +66,8 @@ class GraphParameter < ApplicationParameter
         self.errors.add(:upper_limit, 'is invalid.')
       end
     end
+
+    @cf = params[:cf].presence || @cf
 
     self
   end
